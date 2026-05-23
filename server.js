@@ -3,6 +3,8 @@ const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
 require('dotenv').config();
+const { createClient } = require('@supabase/supabase-js');
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
 const app = express();
 
@@ -28,9 +30,21 @@ app.get('/', (req, res) => {
 });
 
 // Upload route - receives audio files
-app.post('/transcribe', upload.single('audio'), (req, res) => {
-  console.log('File received:', req.file);
-  res.json({ message: 'File received successfully!' });
+app.post('/transcribe', upload.single('audio'), async (req, res) => {
+  try {
+    // Test saving to Supabase
+    const { data, error } = await supabase
+      .from('transcriptions')
+      .insert({ filename: 'test.mp3', transcript: 'This is a test transcription' })
+      .select();
+
+    if (error) throw error;
+
+    res.json({ message: 'Database connection works!', data: data });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Start the server
