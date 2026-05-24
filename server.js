@@ -106,6 +106,24 @@ app.get('/transcriptions', async (req, res) => {
   }
 });
 
+// Delete a transcription
+app.delete('/transcriptions/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const { error } = await supabase
+      .from('transcriptions')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+
+    res.json({ message: 'Transcription deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.listen(8000, () => {
   console.log('Server is running on port 8000');
 });
