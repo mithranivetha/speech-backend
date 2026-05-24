@@ -10,6 +10,10 @@ const { createClient } = require('@supabase/supabase-js');
 
 const app = express();
 
+// Create uploads folder if it doesn't exist
+if (!fs.existsSync('uploads')) {
+  fs.mkdirSync('uploads');
+}
 // Set up Supabase
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
