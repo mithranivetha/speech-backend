@@ -18,7 +18,9 @@ if (!fs.existsSync('uploads')) {
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
 // Allow frontend to talk to backend
-app.use(cors());
+app.use(cors({
+  origin: ['https://speech-to-text12.netlify.app', 'http://localhost:5173']
+}));
 app.use(express.json());
 
 // Set up file upload handling
