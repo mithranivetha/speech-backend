@@ -78,7 +78,10 @@ app.post('/transcribe', upload.single('audio'), async (req, res) => {
       })
       .select();
 
-    if (dbError) throw dbError;
+    if (dbError) {
+      console.error('Supabase error:', JSON.stringify(dbError));
+      throw dbError;
+    }
 
     console.log('Saved to database!');
 
